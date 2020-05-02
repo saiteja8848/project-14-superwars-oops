@@ -2,31 +2,34 @@ const PLAYERS = [
     "Spiderman",
     "Captain America",
     "Wonderwoman",
-    // "Popcorn",
-    // "Gemwoman",
-    // "Bolt",
-    // "Antwoman",
-    // "Mask",
-    // "Tiger",
-    // "Captain",
-    // "Catwoman",
-    // "Fish",
-    // "Hulk",
-    // "Ninja",
-    // "Black Cat",
-    // "Volverine",
-    // "Thor",
-    // "Slayer",
-    // "Vader",
-    // "Slingo"
+    "Popcorn",
+    "Gemwoman",
+    "Bolt",
+    "Antwoman",
+    "Mask",
+    "Tiger",
+    "Captain",
+    "Catwoman",
+    "Fish",
+    "Hulk",
+    "Ninja",
+    "Black Cat",
+    "Volverine",
+    "Thor",
+    "Slayer",
+    "Vader",
+    "Slingo"
 ];
 
 // Player Class
 class Player {
-    constructor(id, name, type) {
+    constructor(id, name, type, pic) {
         // Create member variables and assign values
         // Type your code
-
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.pic = pic;
     }
 
     // getting random strength
@@ -38,48 +41,68 @@ class Player {
     view = () => {
         // Accumulate HTML template
         // Type your code here
-
-    
+        let player = document.createElement('div');
+        player.classList.add('player');
+        player.setAttribute('data-id', this.id);
+        if (this.selected == true)
+            player.classList.add('selected');
+        let image = document.createElement('img');
+        image.setAttribute('src', this.pic);
+        let name = document.createElement('div');
+        name.textContent = this.name;
+        let strength = document.createElement('div');
+        strength.textContent = this.strength;
+        strength.className = 'strength';
+        player.append(image, name, strength);
         return player;
     }
 }
 
 // Superwar Class
 class Superwar {
+
     constructor(players) {
-    // Create a field players 
-    // Use Map method to loop through players argument and create new players
-    // Type your code here
+        // Create a field players 
+        // Use Map method to loop through players argument and create new players
+        // Type your code here
+
+        this.data = players.map(
+            function (name, index) {
+                var pic = "./images/super-" + (index + 1) + ".png";
+                if (index % 2 == 0) { return new Player(index, name, "hero", pic); }
+                else
+                    return new Player(index, name, "villain", pic);
+            });
 
     }
 
     // Display players in HTML
     viewPlayers = () => {
+        console.log("ViewPlayers");
         let team = document.getElementById('heroes');
         team.innerHTML = '';
-        let fragment =
-            this.buildPlayers('hero');
+        let fragment = this.buildPlayers('hero');
+        console.log("Fragment", fragment);
         team.append(fragment);
 
         team = document.getElementById('villains');
         team.innerHTML = '';
-        fragment =
-            this.buildPlayers('villain');
+        fragment = this.buildPlayers('villain');
         team.append(fragment);
     }
 
     // Build players fragment 
     buildPlayers = (type) => {
+        console.log("BUILDPlayers:", type);
         let fragment = document.createDocumentFragment();
-        this.players
-            .filter(player => player.type == type)
-            .forEach(player => fragment.append(player.view()));
+        console.log("fsjbfsdjba", this.data);
+        this.data.filter(player => player.type == type).forEach(player => fragment.append(player.view()));
         return fragment;
     }
 
 }
 
-
+//Check the functions and its return types
 window.onload = () => {
     const superwar = new Superwar(PLAYERS);
     superwar.viewPlayers();
